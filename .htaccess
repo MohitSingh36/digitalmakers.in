@@ -1,0 +1,68 @@
+# Disable directory browsing
+Options -Indexes
+
+# ----------------------------------------------------------------------
+# Rewrite engine
+# ----------------------------------------------------------------------
+
+# FollowSymLinks must be enabled for the rewrite engine to work.
+<IfModule mod_rewrite.c>
+    Options +FollowSymlinks
+    RewriteEngine On
+
+    # Redirect Trailing Slashes...
+    RewriteCond %{REQUEST_FILENAME} !-d
+    RewriteCond %{REQUEST_URI} (.+)/$
+    RewriteRule ^ %1 [L,R=301]
+
+    # Redirect non-www to www for subwebsite
+    RewriteCond %{HTTP_HOST} ^digitalmakers\.in$ [NC]
+    RewriteRule ^(.*)$ http://www.digitalmakers.in/kiwiana-tax/$1 [L,R=301]
+
+    # Rewrite "www.example.co.nz -> example.co.nz"
+    RewriteCond %{HTTPS} !=on
+    RewriteCond %{HTTP_HOST} ^www\.(.+)$ [NC]
+    RewriteRule ^ http://%1%{REQUEST_URI} [R=301,L]
+
+    # Remove index.php from URL
+    RewriteCond %{THE_REQUEST} ^GET\ /index\.php
+    RewriteRule ^index\.php(.*)$ $1 [R=301,L]
+
+    # Checks to see if the user is attempting to access a valid file,
+    # such as an image or css document, if this isn't true it sends the
+    # request to the front controller, index.php
+    RewriteCond %{REQUEST_FILENAME} !-f
+    RewriteCond %{REQUEST_FILENAME} !-d
+    RewriteRule ^([\s\S]*)$ index.php/$1 [L,NC,QSA]
+
+    # Ensure Authorization header is passed along
+    RewriteCond %{HTTP:Authorization} .
+    RewriteRule .* - [E=HTTP_AUTHORIZATION:%{HTTP:Authorization}]
+</IfModule>
+
+<IfModule !mod_rewrite.c>
+    # If we don't have mod_rewrite installed, all 404's
+    # can be sent to index.php, and everything works as normal.
+    ErrorDocument 404 index.php
+</IfModule>
+
+# Disable server signature
+ServerSignature Off
+
+# Set CORS header for font files
+<IfModule mod_headers.c>
+    <FilesMatch "\.(ttf|otf|woff|woff2)$">
+        Header set Access-Control-Allow-Origin "*"
+    </FilesMatch>
+</IfModule>
+
+# Enable CORS for all file types (especially fonts, CSS, and JS)
+<FilesMatch "\.(ttf|ttc|otf|eot|woff|woff2|font.css|css|js)$">
+    <IfModule mod_headers.c>
+        Header set Access-Control-Allow-Origin "*"
+    </IfModule>
+</FilesMatch>
+
+# Redirect kiwianatax.co.nz to www.kiwianatax.co.nz
+RewriteCond %{HTTP_HOST} ^kiwianatax\.co\.nz$ [NC]
+RewriteRule ^(.*)$ https://www.kiwianatax.co.nz/$1 [L,R=301]

@@ -1,0 +1,53 @@
+# CodeIgniter 4 specific
+/vendor/
+writable/logs/*
+!writable/logs/index.html
+
+writable/debugbar/*
+!writable/debugbar/index.html
+
+writable/session/*
+!writable/session/index.html
+
+# Composer packages
+composer.phar
+composer.lock
+
+# PHPStorm, VSCode, & other editors/IDEs
+.idea/
+.vscode/
+*.sublime-workspace
+
+# Node modules if you are using Node.js in your project
+/node_modules/
+
+# Operating system files
+.DS_Store
+Thumbs.db
+
+# Sensitive data and configs
+# .htaccess
+# .env.local
+# .env.production
+
+# PHP unit
+/phpunit.xml
+/tests/_support/_generated/
+
+# User-specific files
+/user_guide_src/
+/user_guide/
+
+# To make untrack
+# git rm --cached -r writable/logs/
+
+public/fw/*
+!/public/fw/css/all.min.css
+!/public/fw/webfonts
+!/public/fw/LICENSE.txt.css
+!/public/fw/webfonts
+!/public/fw/LICENSE.txt
+
+# public/pdfs
+
+.env
