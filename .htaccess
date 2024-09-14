@@ -10,19 +10,15 @@ Options -Indexes
     Options +FollowSymlinks
     RewriteEngine On
 
+    # Redirect all to HTTPS and WWW (Ensure all traffic is HTTPS and starts with www)
+    RewriteCond %{HTTPS} !=on [OR]
+    RewriteCond %{HTTP_HOST} !^www\. [NC]
+    RewriteRule ^(.*)$ https://www.%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
+
     # Redirect Trailing Slashes...
     RewriteCond %{REQUEST_FILENAME} !-d
     RewriteCond %{REQUEST_URI} (.+)/$
     RewriteRule ^ %1 [L,R=301]
-
-    # Redirect non-www to www for subwebsite
-    RewriteCond %{HTTP_HOST} ^digitalmakers\.in$ [NC]
-    RewriteRule ^(.*)$ http://www.digitalmakers.in/kiwiana-tax/$1 [L,R=301]
-
-    # Rewrite "www.example.co.nz -> example.co.nz"
-    RewriteCond %{HTTPS} !=on
-    RewriteCond %{HTTP_HOST} ^www\.(.+)$ [NC]
-    RewriteRule ^ http://%1%{REQUEST_URI} [R=301,L]
 
     # Remove index.php from URL
     RewriteCond %{THE_REQUEST} ^GET\ /index\.php
@@ -63,6 +59,19 @@ ServerSignature Off
     </IfModule>
 </FilesMatch>
 
-# Redirect kiwianatax.co.nz to www.kiwianatax.co.nz
-RewriteCond %{HTTP_HOST} ^kiwianatax\.co\.nz$ [NC]
-RewriteRule ^(.*)$ https://www.kiwianatax.co.nz/$1 [L,R=301]
+# Handle sub-websites like /kiwiana-tax
+<IfModule mod_rewrite.c>
+    RewriteEngine On
+
+    # Ensure HTTPS and WWW for kiwiana-tax
+    RewriteCond %{HTTP_HOST} ^kiwiana-tax\. [NC]
+    RewriteCond %{HTTPS} !=on [OR]
+    RewriteCond %{HTTP_HOST} !^www\. [NC]
+    RewriteRule ^(.*)$ https://www.%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
+
+    # Rewrite subdirectories
+    RewriteCond %{REQUEST_URI} ^/kiwiana-tax [NC]
+    RewriteCond %{REQUEST_FILENAME} !-f
+    RewriteCond %{REQUEST_FILENAME} !-d
+    RewriteRule . /kiwiana-tax/index.php [L]
+</IfModule>
