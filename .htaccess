@@ -5,15 +5,15 @@ Options -Indexes
 # Rewrite engine
 # ----------------------------------------------------------------------
 
-# FollowSymLinks must be enabled for the rewrite engine to work.
 <IfModule mod_rewrite.c>
     Options +FollowSymlinks
     RewriteEngine On
 
-    # Redirect all to HTTPS and WWW (Ensure all traffic is HTTPS and starts with www)
+    # Redirect to HTTPS and WWW (Ensure all traffic is HTTPS and starts with www for digitalmakers.in)
+    RewriteCond %{HTTP_HOST} ^digitalmakers\.in [NC]
     RewriteCond %{HTTPS} !=on [OR]
     RewriteCond %{HTTP_HOST} !^www\. [NC]
-    RewriteRule ^(.*)$ https://www.%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
+    RewriteRule ^(.*)$ https://www.digitalmakers.in/$1 [L,R=301]
 
     # Redirect Trailing Slashes...
     RewriteCond %{REQUEST_FILENAME} !-d
@@ -59,19 +59,3 @@ ServerSignature Off
     </IfModule>
 </FilesMatch>
 
-# Handle sub-websites like /kiwiana-tax
-<IfModule mod_rewrite.c>
-    RewriteEngine On
-
-    # Ensure HTTPS and WWW for kiwiana-tax
-    RewriteCond %{HTTP_HOST} ^kiwiana-tax\. [NC]
-    RewriteCond %{HTTPS} !=on [OR]
-    RewriteCond %{HTTP_HOST} !^www\. [NC]
-    RewriteRule ^(.*)$ https://www.%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
-
-    # Rewrite subdirectories
-    RewriteCond %{REQUEST_URI} ^/kiwiana-tax [NC]
-    RewriteCond %{REQUEST_FILENAME} !-f
-    RewriteCond %{REQUEST_FILENAME} !-d
-    RewriteRule . /kiwiana-tax/index.php [L]
-</IfModule>
