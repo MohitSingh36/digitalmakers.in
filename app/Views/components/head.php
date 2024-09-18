@@ -35,9 +35,9 @@
 <script type="application/ld+json">
 {
   "@context": "https://schema.org",
-  "@type": "Website",
-  "url": "<?= base_url(uri_string()) ?>",
+  "@type": "Organization",
   "name": "Digital Makers",
+  "url": "<?= base_url(uri_string()) ?>",
   "author": {
     "@type": "Organization",
     "name": "DigitalMakers.in"
