@@ -8,9 +8,9 @@ class Home extends BaseController
     {
         $data = [
             "head" => [
-                "title" => "Digital Makers - Your Digital Transformation Partner",
-                "description" => "Digital Makers is a leading web development, SEO, and digital services agency based in India, committed to helping businesses grow online.",
-                "keywords" => "digital makers, web development, web designing, seo, wikipedia page creation, video editing, voice editing, social media management, digital marketing, branding, digital transformation, online presence"
+                "title" => "Your Digital Transformation Partner | Digital Makers",
+                "description" => "Digital Makers is a Leading Web Development, SEO, Editing, Designing and Digital Services agency based in India, committed to helping businesses grow online.",
+                "keywords" => "digital makers, digital makers india, .in, digitalmakers.in, web development, web designing, seo, wikipedia page creation, video editing, voice editing, social media management, digital marketing, branding, digital transformation, online presence"
             ],
         ];        
         return view('index', $data);
